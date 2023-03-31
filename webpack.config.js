@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     mode: "development",
@@ -29,6 +30,7 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
+                type: 'asset/resource',
                 use: 'file-loader',
             },
             {
@@ -47,5 +49,10 @@ module.exports = {
         port: 5000
     },
     devtool: "eval-source-map",
-    plugins: [new HtmlWebpackPlugin({template: 'src/index.html'})]
+    plugins: [
+        new HtmlWebpackPlugin({template: 'src/index.html'}),
+        new CopyWebpackPlugin({
+            patterns: [{from: "./src/assets", to: "assets"}],
+        })
+    ]
 }
