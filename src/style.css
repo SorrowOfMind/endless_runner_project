@@ -13,6 +13,6 @@ body, html {
     border: 4px solid black;
 }
 
-#bg1, #bg2, #bg3 {
+.hide {
     display: none;
 }

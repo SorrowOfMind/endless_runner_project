@@ -23,7 +23,7 @@ class BackgroundLayer extends GameObjectModel {
 
     draw(ctx: CanvasRenderingContext2D) {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.x + this.width - 1, this.y, this.width, this.height);
     }
 
     update() {

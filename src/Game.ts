@@ -13,6 +13,7 @@ class Game implements GameInterface {
     public speed: number;
 
     public background: Background;
+    public player: Player;
 
     constructor(canvasElement: HTMLCanvasElement, width: number, height: number) {
         this.cvs = canvasElement;
@@ -21,9 +22,10 @@ class Game implements GameInterface {
         this._ctx = null;
         this.gameOver = false;
         this.lastTime = 0;
-        this.speed = 1; //just or test!!
+        this.speed = 1; //just for test!!
 
-        this.background = new Background(this, ([tool.id("bg1"), tool.id("bg2"), tool.id("bg3")] as HTMLImageElement[]))
+        this.background = new Background(this, ([tool.id("bg1"), tool.id("bg2"), tool.id("bg3")] as HTMLImageElement[]));
+        this.player = new Player(this, tool.id("player") as HTMLImageElement);
 
         this.initCanvas();
     }
@@ -45,10 +47,12 @@ class Game implements GameInterface {
 
     private draw(ctx: CanvasRenderingContext2D) {
         this.background.draw(ctx);
+        this.player.draw(ctx);
     }
 
     private update(deltaTime: number) {
         this.background.update();
+        this.player.update();
     }
    
 
@@ -60,6 +64,7 @@ class Game implements GameInterface {
         const deltaTime = timestamp - this.lastTime;
         this.lastTime = timestamp;
 
+        this._ctx?.clearRect(0, 0, this.width, this.height);
         this.draw(this.ctx as CanvasRenderingContext2D);
         this.update(deltaTime);
 
