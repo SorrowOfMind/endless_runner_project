@@ -1,5 +1,5 @@
-import { GameInterface } from './../models/interfaces';
-import GameObjectModel from "../models/GameObjectModel";
+import { GameInterface } from '../../models/types';
+import GameObjectModel from "../../models/GameObjectModel";
 
 class BackgroundLayer extends GameObjectModel {
     private game: GameInterface;

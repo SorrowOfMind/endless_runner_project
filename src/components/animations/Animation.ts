@@ -39,10 +39,12 @@ class Animation {
         this.frameSpeed++;
     }
 
-    switchAnimation(frameY: number, maxFrames: number) {
+    switchAnimation(frameY: number, maxFrames: number, frameThrottle?: number) {
         this.currentFrameX = 0;
         this.currentFrameY = frameY;
         this.maxFrames = maxFrames;
+        this.frameThrottle = frameThrottle ?? this.frameThrottle;
+        this.frameSpeed = 0;
     }
 }
 
