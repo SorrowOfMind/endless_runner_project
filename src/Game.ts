@@ -17,7 +17,9 @@ class Game implements GameInterface {
 
     private cvs: HTMLCanvasElement;
     private gameOver: boolean;
-    private lastTime: number;
+    private raf: number | null;
+    private accumulatedTime: number;
+    private timeStep: number;
 
     constructor(canvasElement: HTMLCanvasElement, width: number, height: number) {
         this.cvs = canvasElement;
@@ -25,8 +27,10 @@ class Game implements GameInterface {
         this.height = height;
         this.ctx = null;
         this.gameOver = false;
-        this.lastTime = 0;
-        this.speed = 2; //just for test!!
+        this.raf = null;
+        this.accumulatedTime = window.performance.now()
+        this.timeStep = 1000 / 100;
+        this.speed = 2;
         this.keys = [];
 
         this.background = new Background(this, ([tool.id("bg1"), tool.id("bg2"), tool.id("bg3")] as HTMLImageElement[]));
@@ -52,25 +56,33 @@ class Game implements GameInterface {
         this.player.draw(ctx);
     }
 
-    private update(deltaTime: number) {
+    private update() {
         this.background.update();
-        this.player.update(deltaTime);
+        this.player.update();
     }
    
 
     public loop(timestamp: DOMHighResTimeStamp) {
         if (this.gameOver) {
+            cancelAnimationFrame(this.raf as number);
             return;
         }
 
-        const deltaTime = timestamp - this.lastTime;
-        this.lastTime = timestamp;
+        if (timestamp >= this.accumulatedTime + this.timeStep) {
+            if (timestamp - this.accumulatedTime >= this.timeStep * 2) {
+                this.accumulatedTime = timestamp;
+            }
 
-        this.ctx?.clearRect(0, 0, this.width, this.height);
-        this.draw(this.ctx as CanvasRenderingContext2D);
-        this.update(deltaTime);
+            this.ctx?.clearRect(0, 0, this.width, this.height);
+            this.draw(this.ctx as CanvasRenderingContext2D);
 
-        requestAnimationFrame(this.loop.bind(this));
+            while (this.accumulatedTime < timestamp) {
+                this.accumulatedTime += this.timeStep;
+                this.update();
+            }
+        }
+
+        this.raf = requestAnimationFrame(this.loop.bind(this));
     }
 }
 

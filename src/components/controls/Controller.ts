@@ -21,6 +21,12 @@ class Controller {
                 this.manageKeys('up', type);
                 break;
             }
+            case 'ArrowDown':
+            case's':
+            {
+                this.manageKeys('down', type);
+                break;
+            }
         }
     }
 
