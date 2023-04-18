@@ -1,5 +1,9 @@
 import {Background, Controller} from "../components";
 
+export interface GameObjectInterface {
+    draw(ctx: CanvasRenderingContext2D): void;
+    update(deltaTime?: number): void;
+}
 
 export interface GameInterface {
     ctx: CanvasRenderingContext2D | null;
@@ -11,7 +15,8 @@ export interface GameInterface {
     controller: Controller;
     keys: string[];
     readonly GRAVITY: number;
-    readonly GROUND_HEIGHT: number
+    readonly GROUND_HEIGHT: number;
+    readonly AIR_RESISTANCE: number;
 }
 
 
@@ -22,4 +27,17 @@ export interface PlayerInterface {
     readonly SPRITE_MAX_FRAMES: number[];
     update: (deltatime?: number) => void;
     draw: (ctx: CanvasRenderingContext2D) => void;
+}
+
+export interface EnemyInterface extends GameObjectInterface {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    markedForDeath: boolean;
+}
+
+export interface EnemyManagerInterface extends GameObjectInterface {
+    activeEnemies: EnemyInterface[];
+    spawn: () => void;
 }

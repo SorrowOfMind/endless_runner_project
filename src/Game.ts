@@ -1,5 +1,6 @@
 import { Player, Background, Controller } from "./components";
-import { GameInterface, PlayerInterface } from "./models/types";
+import EnemiesManager from "./components/handlers/EnemiesManager";
+import { EnemyManagerInterface, GameInterface, PlayerInterface } from "./models/types";
 import tool from "./utils/tool";
 
 class Game implements GameInterface {
@@ -10,10 +11,12 @@ class Game implements GameInterface {
     public background: Background;
     public player: PlayerInterface;
     public controller: Controller;
+    public enemiesManager: EnemyManagerInterface;
     public keys: string[];
 
-    readonly GRAVITY: number = 0.4;
-    readonly GROUND_HEIGHT: number = 110;
+    readonly GRAVITY: number = 0.5;
+    readonly GROUND_HEIGHT: number = 130;
+    readonly AIR_RESISTANCE: number = 0.9;
 
     private cvs: HTMLCanvasElement;
     private gameOver: boolean;
@@ -29,13 +32,14 @@ class Game implements GameInterface {
         this.gameOver = false;
         this.raf = null;
         this.accumulatedTime = window.performance.now()
-        this.timeStep = 1000 / 100;
-        this.speed = 2;
+        this.timeStep = 1000 / 200;
+        this.speed = 2.5;
         this.keys = [];
 
         this.background = new Background(this, ([tool.id("bg1"), tool.id("bg2"), tool.id("bg3")] as HTMLImageElement[]));
         this.player = new Player(this, tool.id("player") as HTMLImageElement);
         this.controller = new Controller(this);
+        this.enemiesManager = new EnemiesManager(this);
 
         this.initCanvas();
     }
@@ -54,11 +58,15 @@ class Game implements GameInterface {
     private draw(ctx: CanvasRenderingContext2D) {
         this.background.draw(ctx);
         this.player.draw(ctx);
+        this.enemiesManager.draw(ctx);
     }
 
     private update() {
         this.background.update();
         this.player.update();
+
+        this.enemiesManager.spawn();
+        this.enemiesManager.update();
     }
    
 
@@ -68,19 +76,18 @@ class Game implements GameInterface {
             return;
         }
 
-        if (timestamp >= this.accumulatedTime + this.timeStep) {
-            if (timestamp - this.accumulatedTime >= this.timeStep * 2) {
-                this.accumulatedTime = timestamp;
-            }
+        // if (timestamp >= this.accumulatedTime + this.timeStep) {
+        //     if (timestamp - this.accumulatedTime >= this.timeStep * 2) {
+        //         this.accumulatedTime = timestamp;
+        //     }
 
-            this.ctx?.clearRect(0, 0, this.width, this.height);
             this.draw(this.ctx as CanvasRenderingContext2D);
 
-            while (this.accumulatedTime < timestamp) {
-                this.accumulatedTime += this.timeStep;
+            // while (this.accumulatedTime < timestamp) {
+                // this.accumulatedTime += this.timeStep;
                 this.update();
-            }
-        }
+            //     }
+            // }
 
         this.raf = requestAnimationFrame(this.loop.bind(this));
     }

@@ -1,7 +1,6 @@
-import { GameInterface } from '../../models/types';
-import GameObjectModel from "../../models/GameObjectModel";
+import { GameInterface, GameObjectInterface } from '../../models/types';
 
-class BackgroundLayer extends GameObjectModel {
+class BackgroundLayer implements GameObjectInterface {
     private game: GameInterface;
     private image: CanvasImageSource;
     private speedFactor: number;
@@ -11,7 +10,6 @@ class BackgroundLayer extends GameObjectModel {
     private height: number;
 
     constructor(game: GameInterface, image: CanvasImageSource, speedFactor: number) {
-        super();
         this.game = game;
         this.image = image;
         this.speedFactor = speedFactor;
@@ -23,7 +21,7 @@ class BackgroundLayer extends GameObjectModel {
 
     draw(ctx: CanvasRenderingContext2D) {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        ctx.drawImage(this.image, this.x + this.width - 1, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
     }
 
     update() {
@@ -36,12 +34,11 @@ class BackgroundLayer extends GameObjectModel {
     }
 }
 
-class Background extends GameObjectModel {
+class Background implements GameObjectInterface {
     private game: GameInterface;
     private backgrounds: BackgroundLayer[];
 
     constructor(game: GameInterface, images: HTMLImageElement[]) {
-        super();
         this.game = game;
         this.backgrounds = [];
 

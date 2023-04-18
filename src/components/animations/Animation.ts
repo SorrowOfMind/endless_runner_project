@@ -1,17 +1,18 @@
 
 class Animation {
     private image: CanvasImageSource;
-    private size: number;
+    private width: number;
+    private height: number;
     private currentFrameX: number;
     private currentFrameY: number;
     private maxFrames: number;
     private frameSpeed: number
     private frameThrottle: number;
 
-
-    constructor(image: CanvasImageSource, size: number, currentFrameX: number, currentFrameY: number, maxFrames: number, frameThrottle: number) {
+    constructor(image: CanvasImageSource, width: number, height: number, currentFrameX: number, currentFrameY: number, maxFrames: number, frameThrottle: number) {
         this.image = image;
-        this.size = size;
+        this.width = width;
+        this.height = height;
         this.currentFrameX = currentFrameX;
         this.currentFrameY = currentFrameY;
         this.maxFrames = maxFrames;
@@ -23,14 +24,28 @@ class Animation {
     drawFrame(ctx: CanvasRenderingContext2D, x: number, y: number) {
         ctx.drawImage(
             this.image, 
-            this.currentFrameX * this.size, 
-            this.currentFrameY * this.size, 
-            this.size, 
-            this.size, 
+            this.currentFrameX * this.width, 
+            this.currentFrameY * this.height, 
+            this.width, 
+            this.height, 
             x, 
             y, 
-            this.size, 
-            this.size
+            this.width, 
+            this.height
+        );
+    }
+
+    drawIrregularFrame(ctx: CanvasRenderingContext2D, x: number, y: number, frameWidth: number, frameHeight: number, offset: number) {
+        ctx.drawImage(
+            this.image, 
+            this.currentFrameX * this.width, 
+            this.currentFrameY * this.height, 
+            frameWidth, 
+            frameHeight, 
+            x, 
+            y + offset, 
+            frameWidth, 
+            frameHeight
         );
     }
 
