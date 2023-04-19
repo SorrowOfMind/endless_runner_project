@@ -1,4 +1,3 @@
-
 class Animation {
     private image: CanvasImageSource;
     private width: number;
@@ -16,7 +15,6 @@ class Animation {
         this.currentFrameX = currentFrameX;
         this.currentFrameY = currentFrameY;
         this.maxFrames = maxFrames;
-
         this.frameSpeed = 0;
         this.frameThrottle = frameThrottle;
     }

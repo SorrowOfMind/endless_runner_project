@@ -1,18 +1,25 @@
-import {Background, Controller} from "../components";
+import {Background, InputHandler} from "../components";
 
-export interface GameObjectInterface {
+export interface ObjectInterface {
     draw(ctx: CanvasRenderingContext2D): void;
     update(deltaTime?: number): void;
 }
 
+export interface GameObjectInterface extends ObjectInterface {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
 export interface GameInterface {
-    ctx: CanvasRenderingContext2D | null;
+    isRunning: boolean;
     width: number;
     height: number;
     speed: number;
     background: Background;
     player: PlayerInterface;
-    controller: Controller;
+    inputHandler: InputHandler;
     keys: string[];
     readonly GRAVITY: number;
     readonly GROUND_HEIGHT: number;
@@ -21,21 +28,20 @@ export interface GameInterface {
 
 
 export interface PlayerInterface extends GameObjectInterface {
-    x: number;
-    y: number;
-    readonly SIZE: number;
-    readonly SPRITE_MAX_FRAMES: number[];
+    cherries: number;
+    dead: boolean;
 }
 
 export interface EnemyInterface extends GameObjectInterface {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
     markedForDeath: boolean;
 }
 
-export interface EnemyManagerInterface extends GameObjectInterface {
+export interface GemInterface extends EnemyInterface {
+    picked: boolean;
+}
+
+export interface ObjectsHandlerInterface extends ObjectInterface {
     activeEnemies: EnemyInterface[];
+    activeGems: GemInterface[];
     spawn: () => void;
 }

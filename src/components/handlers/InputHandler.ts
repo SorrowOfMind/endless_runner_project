@@ -1,7 +1,6 @@
 import { GameInterface } from "../../models/types";
 
-
-class Controller {
+class InputHandler {
     private game: GameInterface;
 
     constructor(game: GameInterface) {
@@ -40,4 +39,4 @@ class Controller {
     }
 }
 
-export default Controller;
+export default InputHandler;

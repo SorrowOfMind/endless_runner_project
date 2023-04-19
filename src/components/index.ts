@@ -1,6 +1,7 @@
-import Player from "./player/Player";
+import {Player} from "./objects";
 import Animation from "./animations/Animation";
-import Controller from "./player/Controller";
+import InputHandler from "./handlers/InputHandler";
 import Background from "./layout/Background";
+import Intro from "./layout/Intro";
 
-export {Player, Animation, Controller, Background};
+export {Player, Animation, InputHandler, Background, Intro};

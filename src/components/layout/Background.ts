@@ -1,13 +1,14 @@
-import { GameInterface, GameObjectInterface } from '../../models/types';
+import { GameInterface, ObjectInterface, GameObjectInterface } from '../../models/types';
 
 class BackgroundLayer implements GameObjectInterface {
+    public x: number;
+    public y: number;
+    public width: number;
+    public height: number;
+
     private game: GameInterface;
     private image: CanvasImageSource;
     private speedFactor: number;
-    private x: number;
-    private y: number;
-    private width: number;
-    private height: number;
 
     constructor(game: GameInterface, image: CanvasImageSource, speedFactor: number) {
         this.game = game;
@@ -34,7 +35,7 @@ class BackgroundLayer implements GameObjectInterface {
     }
 }
 
-class Background implements GameObjectInterface {
+class Background implements ObjectInterface {
     private game: GameInterface;
     private backgrounds: BackgroundLayer[];
 
