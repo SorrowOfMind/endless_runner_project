@@ -13,7 +13,7 @@ class Toad extends Enemy implements EnemyInterface {
     private readonly maxFrameSpeed = 20;
 
     constructor(game: GameInterface, x: number, y: number) {
-        super(game, x, y, 45, 30);
+        super(game, x, y, 55, 37);
         this.velX = this.game.speed * 1.5;
         this.image = tool.qs("#toad") as CanvasImageSource;
 

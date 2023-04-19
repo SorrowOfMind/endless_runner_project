@@ -20,13 +20,11 @@ export interface GameInterface {
 }
 
 
-export interface PlayerInterface {
+export interface PlayerInterface extends GameObjectInterface {
     x: number;
     y: number;
     readonly SIZE: number;
     readonly SPRITE_MAX_FRAMES: number[];
-    update: (deltatime?: number) => void;
-    draw: (ctx: CanvasRenderingContext2D) => void;
 }
 
 export interface EnemyInterface extends GameObjectInterface {

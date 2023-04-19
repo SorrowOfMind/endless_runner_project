@@ -9,16 +9,15 @@ class Eagle extends Enemy implements EnemyInterface {
     private velX: number;
     private velY: number;
     private minY: number;
-    private trajectory: number;
 
     private eagleAnimation: Animation;
     private readonly maxFrames = 4;
     private readonly maxFrameSpeed = 10;
+    private readonly trajectory = 11.0418223845137;
 
     constructor(game: GameInterface, x: number, y: number, velX: number) {
         super(game, x, y, 90, 101);
 
-        this.trajectory = 11.0418223845137;
         this.velX = velX * this.game.speed;
         this.velY = -Math.sin(this.trajectory) * 3;
         this.minY = this.game.height - this.game.GROUND_HEIGHT - this.game.player.SIZE + 15;
@@ -33,14 +32,12 @@ class Eagle extends Enemy implements EnemyInterface {
     }
 
     update() {
-
         if (this.y + this.height > this.minY) {
             this.velY = Math.sin(this.trajectory) * 3;
         }
 
         this.x -= this.velX;
         this.y += this.velY;
-        console.log("eagle y", this.y + this.height);
 
         if (this.x + this.width < 0) {
             this.markedForDeath = true;

@@ -3,6 +3,7 @@ import Toad from "../characters/Toad";
 import Bee from "../characters/Bee";
 import Eagle from "../characters/Eagle";
 import getRandomValue from '../../utils/randomValue';
+import Oposum from '../characters/Oposum';
 
 class EnemiesManager implements EnemyManagerInterface {
     public activeEnemies: EnemyInterface[];
@@ -21,7 +22,7 @@ class EnemiesManager implements EnemyManagerInterface {
     spawn() {
         this.counter++;
         if (this.counter === this.delay) {
-            this.getEnemy(getRandomValue(1, 3))
+            this.getEnemy(getRandomValue(1, 4))
             this.counter = 0;
             this.delay = getRandomValue(100, 400);
         }
@@ -37,6 +38,7 @@ class EnemiesManager implements EnemyManagerInterface {
         this.activeEnemies.forEach(enemy => {
             enemy.update();
             //check collisions with the player
+
         });
 
         this.activeEnemies = this.activeEnemies.filter(enemy => !enemy.markedForDeath);
@@ -46,13 +48,16 @@ class EnemiesManager implements EnemyManagerInterface {
         let enemy: EnemyInterface;
         switch(randomEnemy) {
             case 1:
-                enemy = new Toad(this.game, getRandomValue(1100, 1300), 440);
+                enemy = new Toad(this.game, getRandomValue(1100, 1300), 430);
                 break;
             case 2:
-                enemy = new Bee(this.game, getRandomValue(1100, 1200), getRandomValue(150, 350), getRandomValue(1, 3));
+                enemy = new Bee(this.game, getRandomValue(1100, 1300), getRandomValue(150, 350), getRandomValue(1, 3));
                 break;
             case 3:
                 enemy = new Eagle(this.game, 1150, -100, 3);
+                break;
+            case 4:
+                enemy = new Oposum(this.game, getRandomValue(1100, 1300), 420, getRandomValue(2, 4));
                 break;
             default:
                 enemy = new Toad(this.game, getRandomValue(1100, 1300), 360);
@@ -60,7 +65,7 @@ class EnemiesManager implements EnemyManagerInterface {
         }
 
         this.activeEnemies.push(enemy);
-        console.log(this.activeEnemies)
+        console.log(this.activeEnemies);
     }
 
 
