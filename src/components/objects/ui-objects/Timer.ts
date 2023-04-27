@@ -3,17 +3,11 @@ import { GameInterface } from "../../../models/types";
 import Animation from "../../animations/Animation";
 import tool from "../../../utils/tool";
 import { getNiceTimeString, timeConverter } from "../../../utils/timeConverter";
+import UIObject from "./UIObject";
 
-class Timer extends GameObject {
+class Timer extends UIObject {
   public timeString: string = "00:00:00";
 
-  protected velX: number;
-  protected velY: number;
-  protected animation: Animation;
-  protected image: CanvasImageSource;
-
-  private readonly MAX_FRAMES = 5;
-  private readonly MAX_FRAMES_SPEED = 20;
   private ctx: CanvasRenderingContext2D;
 
   constructor(
@@ -23,20 +17,8 @@ class Timer extends GameObject {
     ctx: CanvasRenderingContext2D
   ) {
     super(game, x, y, 40, 35);
-    this.velX = 0;
-    this.velY = 0;
 
     this.ctx = ctx;
-    this.image = tool.qs("#cherry") as CanvasImageSource;
-    this.animation = new Animation(
-      this.image,
-      this.width,
-      this.height,
-      0,
-      0,
-      this.MAX_FRAMES,
-      this.MAX_FRAMES_SPEED
-    );
   }
 
   override draw(ctx: CanvasRenderingContext2D): void {
@@ -57,11 +39,6 @@ class Timer extends GameObject {
     const time = timeConverter(n);
     this.timeString = getNiceTimeString(time);
     this.drawNumber();
-    this.animation.loopFrame();
-  }
-
-  resetTimer() {
-    
   }
 }
 

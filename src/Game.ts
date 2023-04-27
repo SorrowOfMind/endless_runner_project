@@ -28,6 +28,7 @@ class Game implements GameInterface {
   private cvs: HTMLCanvasElement;
   private _ctx: CanvasRenderingContext2D | null;
   private raf: number | null;
+  private startTime: number;
   private accumulatedTime: number;
   private timeStep: number;
   private gemScore: GemScore | null = null;
@@ -47,6 +48,7 @@ class Game implements GameInterface {
     this._ctx = null;
     this.gameOver = false;
     this.raf = null;
+    this.startTime = 0;
     this.accumulatedTime = window.performance.now();
     this.timeStep = 1000 / 200;
     this.speed = 2.5;
@@ -61,7 +63,6 @@ class Game implements GameInterface {
       tool.id("bg3"),
     ] as HTMLImageElement[]);
     this.player = new Player(this, 100, 315);
-    console.log("is this even getting called");
     this.inputHandler = new InputHandler(this);
     this.objectsHandler = new ObjectsHandler(this);
 
@@ -71,19 +72,22 @@ class Game implements GameInterface {
   public gameOverProcedure() {
     this.gameOver = true;
     this.ctx?.clearRect(0, 0, this.width, this.height);
-    this.gameOverCallback(this.gemsCollected, this.accumulatedTime);
+    this.gameOverCallback(
+      this.gemsCollected,
+      this.accumulatedTime - this.startTime
+    );
   }
 
   public resetGame() {
     this.gameOver = false;
+    this.startTime = this.accumulatedTime;
     this.raf = null;
-    this.accumulatedTime = window.performance.now();
+    this.accumulatedTime = performance.now();
     this.keys = [];
     this.gemsCollected = 0;
     this.objectsHandler.activeEnemies = [];
     this.objectsHandler.activeGems = [];
     this.player.resetPlayer();
-    this.timer?.resetTimer();
   }
 
   public loop(timestamp: DOMHighResTimeStamp) {
@@ -92,10 +96,11 @@ class Game implements GameInterface {
       return;
     }
 
-    if (timestamp >= this.accumulatedTime + this.timeStep) {
-      if (timestamp - this.accumulatedTime >= this.timeStep * 2) {
-        this.accumulatedTime = timestamp;
-      }
+    if (
+      timestamp >= this.accumulatedTime + this.timeStep &&
+      timestamp - this.accumulatedTime >= this.timeStep * 2
+    ) {
+      this.accumulatedTime = timestamp;
     }
     this.draw(this._ctx as CanvasRenderingContext2D);
 
@@ -131,7 +136,7 @@ class Game implements GameInterface {
     this.gemScore?.update(this.gemsCollected);
     this.objectsHandler.spawn();
     this.objectsHandler.update();
-    this.timer?.update(this.accumulatedTime);
+    this.timer?.update(this.accumulatedTime - this.startTime);
   }
 
   get ctx() {
