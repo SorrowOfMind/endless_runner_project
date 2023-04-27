@@ -2,6 +2,7 @@ import { Player, Background, InputHandler } from "./components";
 import ObjectsHandler from "./components/handlers/ObjectsHandler";
 import GameOver from "./components/layout/GameOver";
 import GemScore from "./components/objects/ui-objects/GemScore";
+import Timer from "./components/objects/ui-objects/Timer";
 import {
   ObjectsHandlerInterface,
   GameInterface,
@@ -15,7 +16,7 @@ class Game implements GameInterface {
   public height: number;
   public speed: number;
   public background: Background;
-  public player: PlayerInterface;
+  public player: Player;
   public inputHandler: InputHandler;
   public objectsHandler: ObjectsHandlerInterface;
   public keys: string[];
@@ -31,9 +32,16 @@ class Game implements GameInterface {
   private accumulatedTime: number;
   private timeStep: number;
   private gemScore: GemScore | null = null;
+  private timer: Timer | null = null;
   public gemsCollected: number;
+  private gameOverCallback: () => void;
 
-  constructor(canvasElement: HTMLCanvasElement, width: number, height: number) {
+  constructor(
+    canvasElement: HTMLCanvasElement,
+    width: number,
+    height: number,
+    gameOverCallback: () => void
+  ) {
     this.cvs = canvasElement;
     this.width = width;
     this.height = height;
@@ -46,6 +54,7 @@ class Game implements GameInterface {
     this.keys = [];
     this.isRunning = false;
     this.gemsCollected = 0;
+    this.gameOverCallback = gameOverCallback;
 
     this.background = new Background(this, [
       tool.id("bg1"),
@@ -53,7 +62,7 @@ class Game implements GameInterface {
       tool.id("bg3"),
     ] as HTMLImageElement[]);
     this.player = new Player(this, 100, 315);
-
+    console.log("is this even getting called");
     this.inputHandler = new InputHandler(this);
     this.objectsHandler = new ObjectsHandler(this);
 
@@ -63,12 +72,10 @@ class Game implements GameInterface {
   public gameOverProcedure() {
     this.gameOver = true;
     this.ctx?.clearRect(0, 0, this.width, this.height);
-    document.getElementById("cvs")?.classList.add("hide");
-    document.getElementById("gameover")?.classList.remove("hide");
+    this.gameOverCallback();
   }
 
   public loop(timestamp: DOMHighResTimeStamp) {
-    console.log("called");
     if (this.gameOver) {
       cancelAnimationFrame(this.raf as number);
       return;
@@ -81,11 +88,8 @@ class Game implements GameInterface {
     }
     this.draw(this._ctx as CanvasRenderingContext2D);
 
-    // while (this.accumulatedTime < timestamp) {
-    // this.accumulatedTime += this.timeStep;
+    this.accumulatedTime += this.timeStep;
     this.update();
-    //     }
-    // }
 
     this.raf = requestAnimationFrame(this.loop.bind(this));
   }
@@ -97,6 +101,7 @@ class Game implements GameInterface {
       throw new Error("No 2D context available");
     }
     this.gemScore = new GemScore(this, 15, 15, this.ctx!);
+    this.timer = new Timer(this, 800, 45, this.ctx!);
     this.cvs.width = this.width;
     this.cvs.height = this.height;
   }
@@ -106,6 +111,7 @@ class Game implements GameInterface {
     this.player.draw(ctx);
     this.gemScore?.draw(ctx);
     this.objectsHandler.draw(ctx);
+    this.timer?.draw(ctx);
   }
 
   private update() {
@@ -114,6 +120,7 @@ class Game implements GameInterface {
     this.gemScore?.update(this.gemsCollected);
     this.objectsHandler.spawn();
     this.objectsHandler.update();
+    this.timer?.update(this.accumulatedTime);
   }
 
   get ctx() {

@@ -43,13 +43,13 @@ class ObjectsHandler implements ObjectsHandlerInterface {
     this.activeEnemies.forEach((enemy) => {
       enemy.update();
       const player = this.game.player;
-
-      const overlapX =
-        player.x + player.width >= enemy.x && enemy.x + enemy.width >= player.x;
-      const overlapY =
-        player.y + player.height >= enemy.y &&
-        enemy.y + enemy.height >= player.y;
-      if (overlapX && overlapY) {
+      if (
+        player.x < enemy.x + enemy.width - 10 &&
+        player.x + player.width > enemy.x + 10 &&
+        (player.isDucking ? player.y + 19 : player.y) <
+          enemy.y + enemy.height - 10 &&
+        player.height + player.y > enemy.y
+      ) {
         player.dead = true;
         this.game.gameOverProcedure();
       }
@@ -57,11 +57,13 @@ class ObjectsHandler implements ObjectsHandlerInterface {
     this.activeGems.forEach((gem) => {
       gem.update();
       const player = this.game.player;
-      const overlapX =
-        player.x + player.width >= gem.x && gem.x + gem.width >= player.x;
-      const overlapY =
-        player.y + player.height >= gem.y && gem.y + gem.height >= player.y;
-      if (overlapX && overlapY) {
+
+      if (
+        player.x < gem.x + gem.width &&
+        player.x + player.width > gem.x &&
+        (player.isDucking ? player.y + 19 : player.y) < gem.y + gem.height &&
+        player.height + player.y > gem.y
+      ) {
         this.game.gemsCollected += 1;
         gem.markedForDeath = true;
       }
