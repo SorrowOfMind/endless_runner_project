@@ -2,6 +2,7 @@ import GameObject from "../GameObject";
 import { GameInterface } from "../../../models/types";
 import Animation from "../../animations/Animation";
 import tool from "../../../utils/tool";
+import { getNiceTimeString, timeConverter } from "../../../utils/timeConverter";
 
 class Timer extends GameObject {
   public timeString: string = "00:00:00";
@@ -53,14 +54,8 @@ class Timer extends GameObject {
   }
 
   update(n: number) {
-    this.x -= this.velX;
-    const hours = Math.floor(n / (1000 * 60 * 60));
-    const minutes = Math.floor((n - hours * 3600 * 1000) / (1000 * 60));
-    const seconds = Math.floor((n - minutes * 60 * 1000) / 1000);
-
-    this.timeString = `${hours > 9 ? hours : "0" + hours}:${
-      minutes > 9 ? minutes : "0" + minutes
-    }:${seconds > 9 ? seconds : "0" + seconds}`;
+    const time = timeConverter(n);
+    this.timeString = getNiceTimeString(time);
     this.drawNumber();
     this.animation.loopFrame();
   }

@@ -15,12 +15,12 @@ const theGame = (first: boolean) => {
     );
   }
 
-  const gameOverCallback = () => {
+  const gameOverCallback = (score: number, time: number) => {
     game = null;
     console.log(game);
     createNewGame();
     console.log(game);
-    const gameOver = new GameOver(() => game?.loop(0));
+    const gameOver = new GameOver(() => game?.loop(0), score, time);
   };
 
   if (first) {
@@ -28,7 +28,7 @@ const theGame = (first: boolean) => {
       tool.id("cvs") as HTMLCanvasElement,
       1000,
       600,
-      gameOverCallback
+      (score: number, time: number) => gameOverCallback(score, time)
     );
     const intro = new Intro(tool.id("intro") as HTMLDivElement, () =>
       game?.loop(0)

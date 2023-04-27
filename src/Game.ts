@@ -34,13 +34,13 @@ class Game implements GameInterface {
   private gemScore: GemScore | null = null;
   private timer: Timer | null = null;
   public gemsCollected: number;
-  private gameOverCallback: () => void;
+  private gameOverCallback: (score: number, time: number) => void;
 
   constructor(
     canvasElement: HTMLCanvasElement,
     width: number,
     height: number,
-    gameOverCallback: () => void
+    gameOverCallback: (score: number, time: number) => void
   ) {
     this.cvs = canvasElement;
     this.width = width;
@@ -72,7 +72,7 @@ class Game implements GameInterface {
   public gameOverProcedure() {
     this.gameOver = true;
     this.ctx?.clearRect(0, 0, this.width, this.height);
-    this.gameOverCallback();
+    this.gameOverCallback(this.gemsCollected, this.accumulatedTime);
   }
 
   public loop(timestamp: DOMHighResTimeStamp) {
