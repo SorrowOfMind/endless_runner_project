@@ -59,6 +59,10 @@ class Timer extends GameObject {
     this.drawNumber();
     this.animation.loopFrame();
   }
+
+  resetTimer() {
+    
+  }
 }
 
 export default Timer;

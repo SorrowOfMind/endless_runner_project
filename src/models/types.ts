@@ -21,14 +21,17 @@ export interface GameInterface {
   player: PlayerInterface;
   inputHandler: InputHandler;
   keys: string[];
+  gemsCollected: number;
+  gameOverProcedure: () => void;
   readonly GRAVITY: number;
   readonly GROUND_HEIGHT: number;
   readonly AIR_RESISTANCE: number;
 }
 
 export interface PlayerInterface extends GameObjectInterface {
-  cherries: number;
   dead: boolean;
+  isDucking: boolean;
+  resetPlayer: () => void;
 }
 
 export interface EnemyInterface extends GameObjectInterface {

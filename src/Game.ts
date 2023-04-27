@@ -1,6 +1,5 @@
 import { Player, Background, InputHandler } from "./components";
 import ObjectsHandler from "./components/handlers/ObjectsHandler";
-import GameOver from "./components/layout/GameOver";
 import GemScore from "./components/objects/ui-objects/GemScore";
 import Timer from "./components/objects/ui-objects/Timer";
 import {
@@ -16,10 +15,11 @@ class Game implements GameInterface {
   public height: number;
   public speed: number;
   public background: Background;
-  public player: Player;
+  public player: PlayerInterface;
   public inputHandler: InputHandler;
   public objectsHandler: ObjectsHandlerInterface;
   public keys: string[];
+  public gameOver: boolean;
 
   readonly GRAVITY: number = 0.5;
   readonly GROUND_HEIGHT: number = 130;
@@ -27,7 +27,6 @@ class Game implements GameInterface {
 
   private cvs: HTMLCanvasElement;
   private _ctx: CanvasRenderingContext2D | null;
-  private gameOver: boolean;
   private raf: number | null;
   private accumulatedTime: number;
   private timeStep: number;
@@ -73,6 +72,18 @@ class Game implements GameInterface {
     this.gameOver = true;
     this.ctx?.clearRect(0, 0, this.width, this.height);
     this.gameOverCallback(this.gemsCollected, this.accumulatedTime);
+  }
+
+  public resetGame() {
+    this.gameOver = false;
+    this.raf = null;
+    this.accumulatedTime = window.performance.now();
+    this.keys = [];
+    this.gemsCollected = 0;
+    this.objectsHandler.activeEnemies = [];
+    this.objectsHandler.activeGems = [];
+    this.player.resetPlayer();
+    this.timer?.resetTimer();
   }
 
   public loop(timestamp: DOMHighResTimeStamp) {

@@ -12,7 +12,7 @@ class ObjectsHandler implements ObjectsHandlerInterface {
   public activeEnemies: EnemyInterface[];
   public activeGems: GemInterface[];
 
-  private game: Game;
+  private game: GameInterface;
   private counter: number;
   private delay: number;
 

@@ -4,7 +4,6 @@ import Animation from "../../animations/Animation";
 import tool from "../../../utils/tool";
 
 class Player extends GameObject implements PlayerInterface {
-  public cherries: number;
   public dead: boolean;
   public isDucking: boolean;
 
@@ -41,7 +40,6 @@ class Player extends GameObject implements PlayerInterface {
     this.isDucking = false;
     this.jumpCount = 0;
     this.maxFrameSpeed = 30;
-    this.cherries = 0;
     this.dead = false;
 
     this.animation = new Animation(
@@ -139,6 +137,17 @@ class Player extends GameObject implements PlayerInterface {
 
     this.animation.loopFrame();
   }
+
+  resetPlayer() {
+    this.velY = 0;
+    this.velX = 0;
+    this.prevYVel = 0;
+    this.isJumping = false;
+    this.isFalling = false;
+    this.isDucking = false;
+    this.jumpCount = 0;
+  }
+
 }
 
 export default Player;

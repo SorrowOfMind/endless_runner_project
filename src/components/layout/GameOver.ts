@@ -4,13 +4,14 @@ class GameOver {
   private element: HTMLElement;
   private handler: (e: KeyboardEvent) => void;
   private callback: () => void;
+
   constructor(callback: () => void, score: number, time: number) {
     let _elem = document.getElementById("gameover");
     if (_elem === null) throw new Error("Failed to find gameover element");
     _elem.classList.remove("hide");
     this.element = _elem;
-    this.initListener();
     this.handler = () => {};
+    this.initListener();
     this.callback = callback;
 
     let _score = document.getElementById("score");
@@ -34,7 +35,6 @@ class GameOver {
   }
   private startGame() {
     this.element.classList.add("hide");
-
     this.callback();
   }
 }

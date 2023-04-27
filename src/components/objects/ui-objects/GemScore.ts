@@ -1,4 +1,3 @@
-import GameObject from "../GameObject";
 import { GameInterface } from "../../../models/types";
 import Animation from "../../animations/Animation";
 import tool from "../../../utils/tool";
